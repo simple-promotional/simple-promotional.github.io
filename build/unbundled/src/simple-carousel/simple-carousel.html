@@ -1,0 +1,48 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+
+
+
+
+
+<link rel="import" href="../../bower_components/sc-swiper/sc-swiper.html">
+
+</head><body><dom-module id="simple-carousel">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      sc-swiper {
+        cursor: pointer;
+        width: 640px;
+        max-width: 640px;
+        height: 320px;
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .scrollbar {
+        height: 100px;
+      }
+    </style>
+
+    <sc-swiper pagination="" pagination-clickable="" keyboard-control="" loop="">
+      <img src="../../images/promo_tv_en_mobile.jpg">
+      <img src="../../images/promo_tv_en_mobile.jpg">
+      <img src="../../images/promo_tv_en_mobile.jpg">
+    </sc-swiper>
+
+    <sc-swiper class="scrollbar" scrollbar="">
+      <img src="../../images/buttons.png">
+      <img src="../../images/buttons.png">
+    </sc-swiper>
+
+
+
+
+  </template>
+
+  <script>Polymer({is:"simple-carousel",properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/640/320"}}});</script>
+</dom-module>
+</body></html>

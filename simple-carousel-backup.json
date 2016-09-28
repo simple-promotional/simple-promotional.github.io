@@ -1,0 +1,38 @@
+{
+	"image1": {
+
+		"image-url-en": "http://placekitten.com/640/320",
+		"image-url-fr": "http://placekitten.com/640/320",
+
+		"link-url-en": "http://www.holacracy.org/",
+		"link-url-fr": "http://www.holacracy.org/",
+
+		"alt-text-en": "That's right!",
+		"alt-text-fr": "C'est vrait!"
+
+	},
+	"image2": {
+
+		"image-url-en": "http://placekitten.com/640/320",
+		"image-url-fr": "http://placekitten.com/640/320",
+
+		"link-url-en": "http://www.holacracy.org/",
+		"link-url-fr": "http://www.holacracy.org/",
+
+		"alt-text-en": "That's right!",
+		"alt-text-fr": "C'est vrait!"
+
+	},
+	"image3": {
+
+		"image-url-en": "http://placehold.it/640/320",
+		"image-url-fr": "http://placehold.it/640/320",
+
+		"link-url-en": "http://www.lorempixel.org/",
+		"link-url-fr": "http://www.lorempixel.org/",
+
+		"alt-text-en": "That's right!",
+		"alt-text-fr": "C'est vrait!"
+
+	}
+}

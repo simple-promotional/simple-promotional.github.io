@@ -1,0 +1,257 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
+<link rel="import" href="../../bower_components/iron-swipeable-pages/iron-swipeable-pages.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-date-picker-item/paper-date-picker-item.html">
+<link rel="import" href="../../bower_components/paper-date-picker-item/paper-datetime-picker-item.html">
+<link rel="import" href="../../bower_components/paper-typeahead-input/paper-typeahead-input.html">
+
+
+<dom-module id="simple-banner">
+  <template>
+    <style>
+      :host {
+        display: block;
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+      }
+      paper-material {
+        margin: 12px 24px;
+      }
+      paper-input {
+        width: 90%;
+        margin-left: 24px;
+      }
+      paper-material.controller {
+        margin: auto;
+        width: 90%;
+      }
+      .cafe-header { @apply(--paper-font-headline); }
+      .cafe-light { color: var(--paper-grey-600); }
+      .cafe-location {
+        float: right;
+        font-size: 15px;
+        vertical-align: middle;
+      }
+      .yellow-button {
+        color: var(--paper-yellow-a100);
+      }
+      @media (max-width: 767px) {
+        .preview {
+          display:none;
+        }
+      }
+      @media (min-width: 768px) {
+        .controller {
+          display: none;
+        }
+      }
+
+      iron-swipeable-pages > * {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+        /*cursor: pointer;*/
+        width: 90%;
+
+
+      }
+
+      iron-swipeable-pages {
+        height: 360px;
+        /*width: 110%;*/
+        /*min-width: 380px;*/
+        /*max-width: 500px;*/
+        overflow-y: hidden;
+        overflow-x: hidden;
+      }
+
+      paper-typeahead-input {
+        margin: 0 24px;
+        width: 81%;
+      }
+
+      .headline {
+        margin: 24px;
+        @apply(--paper-font-headline);
+      }
+      .target {
+        position: absolute;
+        top: 240px;
+        left: 526px;
+      }
+    </style>
+
+
+    <firebase-document
+      location="https://banners-18980.firebaseio.com/images"
+      data="{{images}}"></firebase-document>
+
+    <paper-datetime-picker-item icon="icons:today" placeholder="Set Preview Time (PST)" default-time="09:00"></paper-datetime-picker-item>
+
+    <paper-material class="preview">
+      <iron-image src="../../images/desktop.png"></iron-image>
+      <iron-image style="width: 734px; height: 343px;" sizing="contain" class="target" src="{{images.image1.value}}"></iron-image>
+      <!--<iron-image style="width: 734px; height: 363px;" sizing="contain" class="target" src="../../images/banner.png"></iron-image>-->
+    </paper-material>
+
+    <paper-material elevation="1" class="controller">
+      <h1 class="headline">Banner Publish Tool</h1>
+      <paper-typeahead-input max-suggestions="10" placeholder="Category"
+                             prefetch-url="../../categories.json">
+      </paper-typeahead-input>
+      <paper-typeahead-input max-suggestions="10" placeholder="Sub-Category"
+                             prefetch-url="../../categories.json">
+      </paper-typeahead-input>
+
+    <div class="toolbar">
+      <iron-swipeable-pages id="ironPropsCarousel" selected="{{slideIndex}}" transition-duration="0">
+          <div>
+              <div hidden$="[[isFrench]]">
+                <paper-input label="Image Target ID" value="{{images.image1.text}}"></paper-input>
+                <paper-input label="Image link URL" value="{{images.image1.value}}"></paper-input>
+                <paper-input label="Image launch URL" value="{{images.image1.linkUrlEn}}"></paper-input>
+                <paper-input label="Image Alt Text" value="{{images.image1.altTextEn}}"></paper-input>
+
+                </div>
+
+                <div hidden$="[[!isFrench]]">
+                  <paper-input label="Image Target ID" value="{{images.image1.linkUrlFr}}"></paper-input>
+                  <paper-input label="Image link URL" value="{{images.image1.value}}"></paper-input>
+                  <paper-input label="Image launch URL" value="{{images.image1.linkUrlFr}}"></paper-input>
+                  <paper-input label="Image Alt Text" value="{{images.image1.altTextFr}}"></paper-input>
+                </div>
+
+              <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+              <paper-datetime-picker-item icon="icons:event" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+
+        </div>
+        <div>
+          <div hidden$="[[isFrench]]">
+            <paper-input label="Image link URL" value="{{images.image2.value}}"></paper-input>
+            <paper-input label="Image text label" value="{{images.image2.text}}"></paper-input>
+            <paper-input label="Image launch URL" value="{{images.image2.linkUrlEn}}"></paper-input>
+            <paper-input label="Image Alt Text" value="{{images.image2.altTextEn}}"></paper-input>
+
+          </div>
+
+          <div hidden$="[[!isFrench]]">
+            <paper-input label="Image link URL" value="{{images.image2.value}}"></paper-input>
+            <paper-input label="Image launch URL" value="{{images.image2.linkUrlFr}}"></paper-input>
+            <paper-input label="Image Alt Text" value="{{images.image2.altTextFr}}"></paper-input>
+          </div>
+
+          <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+          <paper-datetime-picker-item icon="icons:event" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+        </div>
+
+        <div>
+          <div hidden$="[[isFrench]]">
+            <paper-input label="Image link URL" value="{{images.image3.value}}"></paper-input>
+            <paper-input label="Image text label" value="{{images.image3.text}}"></paper-input>
+            <paper-input label="Image launch URL" value="{{images.image3.linkUrlEn}}"></paper-input>
+            <paper-input label="Image Alt Text" value="{{images.image3.altTextEn}}"></paper-input>
+
+          </div>
+
+          <div hidden$="[[!isFrench]]">
+            <paper-input label="Image link URL" value="{{images.image3.value}}"></paper-input>
+            <paper-input label="Image launch URL" value="{{images.image3.linkUrlFr}}"></paper-input>
+            <paper-input label="Image Alt Text" value="{{images.image3.altTextFr}}"></paper-input>
+          </div>
+
+          <paper-datetime-picker-item icon="icons:today" placeholder="Start date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+          <paper-datetime-picker-item icon="icons:event" placeholder="End date / time (PST)" default-time="09:00"></paper-datetime-picker-item>
+        </div>
+      </iron-swipeable-pages>
+
+
+
+      <p>
+        <paper-button raised on-tap="submit" name="submit" id="submit">Save</paper-button>
+        <paper-checkbox on-tap="toggleFrench">French</paper-checkbox>
+      </p>
+
+    </div>
+
+
+
+      </paper-material>
+
+
+  <paper-toast id="mainToast" duration="5000" text="Content Saved!">
+    <paper-button on-tap="closeToast" class="yellow-button">Undo</paper-button>
+  </paper-toast>
+
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'simple-banner',
+
+      properties: {
+        imgSrc: {
+          type: String,
+          notify: true,
+          value: 'http://lorempixel.com/640/320'
+        },
+
+        images: Object,
+
+        slideIndex: {
+          type: Number,
+          value: 0
+        },
+
+        isFrench: {
+          type: Boolean,
+          notify: true,
+          value: false
+        }
+      },
+
+      _onNextClick: function () {
+        this.$.pages.entryAnimation = 'slide-from-right-animation';
+        this.$.pages.exitAnimation = 'slide-left-animation';
+        this.$.pages.selectNext();
+      },
+      _onPrevClick: function () {
+        this.$.pages.entryAnimation = 'slide-from-left-animation';
+        this.$.pages.exitAnimation = 'slide-right-animation';
+        this.$.pages.selectPrevious();
+      },
+
+      toggleFrench: function() {
+        this.isFrench = !this.isFrench;
+      },
+
+      updateUrl: function() {
+        console.log(this.url);
+        console.log(this.imgSrc);
+        this.imgSrc = this.url;
+        console.log(this.imgSrc);
+        document.querySelector('firebase-document').image1.value = this.imgSrc.value;
+      },
+
+      submit: function () {
+        console.log('submit!');
+        this.$.mainToast.open();
+      },
+
+      closeToast: function() {
+        this.$.mainToast.close();
+      }
+
+    });
+  </script>
+</dom-module>

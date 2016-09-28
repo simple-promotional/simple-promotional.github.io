@@ -1,0 +1,26 @@
+{
+  "name": "simple-carousel",
+  "description": "A simple carousel that can be used as a WebView in a native iOS or Android app and updated across all platforms in real-time.",
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "iron-swipeable-container": "PolymerElements/iron-swipeable-container#^1.0.3",
+    "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3",
+    "firebase-element": "GoogleWebComponents/firebase-element#^1.0.15",
+    "paper-button": "PolymerElements/paper-button#^1.0.3",
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.3.5",
+    "paper-input": "PolymerElements/paper-input#^1.1.18",
+    "paper-card": "PolymerElements/paper-card#^1.1.2",
+    "paper-toast": "PolymerElements/paper-toast#^1.3.0",
+    "paper-typeahead-input": "cheonhyangzhang/paper-typeahead-input#^1.3.13",
+    "neon-animation": "PolymerElements/neon-animation#^1.2.4",
+    "iron-swipeable-pages": "metanov/iron-swipeable-pages#^1.2.6"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "simple-carousel",
+  "short_name": "simple-carousel",
+  "description": "A simple carousel that can be used as a WebView in a native iOS or Android app and updated across all platforms in real-time.",
+  "start_url": "/",
+  "display": "standalone"
+}

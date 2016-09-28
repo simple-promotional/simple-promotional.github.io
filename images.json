@@ -1,0 +1,40 @@
+{"images":
+	{
+	"image1": {
+
+		"value": "http://placekitten.com/640/320",
+		"imageUrlFr": "http://placekitten.com/640/320",
+
+		"linkUrlEn": "http://www.holacracy.org/",
+		"linkUrlFr": "http://www.holacracy.org/",
+
+		"altTextEn": "That's right!",
+		"altTextFr": "C'est vrait!"
+
+	},
+	"image2": {
+
+		"value": "http://lorempixel.com/640/320",
+		"imageUrlFr": "http://lorempixel.com/640/320",
+
+		"linkUrlEn": "http://www.holacracy.org/",
+		"linkUrlFr": "http://www.holacracy.org/",
+
+		"altTextEn": "That's right!",
+		"altTextFr": "C'est vrait!"
+
+	},
+	"image3": {
+
+		"value": "http://placehold.it/640x320",
+		"imageUrlFr": "http://placehold.it/640x320",
+
+		"linkUrlEn": "http://www.holacracy.org/",
+		"linkUrlFr": "http://www.holacracy.org/",
+
+		"altTextEn": "That's right!",
+		"altTextFr": "C'est vrait!"
+
+	}
+}
+}

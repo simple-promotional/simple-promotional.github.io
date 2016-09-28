@@ -1,0 +1,132 @@
+<html><head><link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
+<link rel="import" href="../../bower_components/iron-swipeable-pages/iron-swipeable-pages.html">
+
+
+</head><body><dom-module id="simple-banner">
+  <template>
+    <style>
+      :host {
+        display: block;
+        @apply(--layout-horizontal);
+        @apply(--layout-center-justified);
+      }
+      paper-material, paper-input, paper-button[raised] {
+        margin: 24px;
+      }
+      .cafe-header { @apply(--paper-font-headline); }
+      .cafe-light { color: var(--paper-grey-600); }
+      .cafe-location {
+        float: right;
+        font-size: 15px;
+        vertical-align: middle;
+      }
+      .yellow-button {
+        color: var(--paper-yellow-a100);
+      }
+      @media (max-width: 767px) {
+        .presenter, span {
+          display: none;
+        }
+        paper-card {
+          /*max-width: 450px;*/
+        }
+      }
+      @media (min-width: 768px) {
+        .controller {
+          display: none;
+        }
+        .presenter {
+          top: 147px;
+        }
+      }
+
+      paper-material {
+        max-width: 100%;
+      }
+      .toolbar {
+        width: 100%;
+      }
+
+      iron-swipeable-pages {
+        @apply(--layout-flex);
+      }
+
+      iron-swipeable-pages > * {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;          /* Likely future */
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+
+      .page {
+        height: 100%;
+      }
+
+      iron-swipeable-pages {
+        height: 324px;
+        width: 640px;
+        /*min-height: 160px;*/
+        /*max-height: 320px;*/
+        /*min-width: 320px;*/
+        /*max-width: 640px;*/
+        max-width: 100%;
+      }
+
+      iron-image {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
+
+    <firebase-document location="https://simple-carousel.firebaseio.com/images" data="{{images}}"></firebase-document>
+
+    <paper-material elevation="1">
+
+      <iron-swipeable-pages selected="0">
+        <div>
+          <iron-image style="width:100%px; height:320px; background-color: #fafafa" sizing="cover" preload="" fade="" src="{{images.image1.value}}"></iron-image>
+        </div>
+        <div>
+          <iron-image style="width:100%px; height:320px; background-color: #fafafa" sizing="cover" preload="" fade="" src="{{images.image2.value}}"></iron-image>
+        </div>
+        <div>
+          <iron-image style="width:100%px; height:320px; background-color: #fafafa" sizing="cover" preload="" fade="" src="{{images.image3.value}}"></iron-image>
+        </div>
+      </iron-swipeable-pages>
+
+    <div class="toolbar">
+
+      <paper-input placeholder="URL to image" value="{{images.image1.value}}"></paper-input>
+      <paper-input placeholder="URL to image" value="{{images.image2.value}}"></paper-input>
+      <paper-input placeholder="URL to image" value="{{images.image3.value}}"></paper-input>
+
+      <paper-button raised="" on-tap="submit">Publish</paper-button>
+    </div>
+
+
+
+      </paper-material>
+
+
+  <paper-toast id="mainToast" duration="5000" text="Content Published!">
+    <paper-button on-tap="closeToast" class="yellow-button">Undo</paper-button>
+  </paper-toast>
+
+
+  </template>
+
+  <script>Polymer({is:"simple-banner",properties:{imgSrc:{type:String,notify:!0,value:"http://lorempixel.com/640/320"},images:{}},_onNextClick:function(){this.$.pages.entryAnimation="slide-from-right-animation",this.$.pages.exitAnimation="slide-left-animation",this.$.pages.selectNext()},_onPrevClick:function(){this.$.pages.entryAnimation="slide-from-left-animation",this.$.pages.exitAnimation="slide-right-animation",this.$.pages.selectPrevious()},updateUrl:function(){console.log(this.url),console.log(this.imgSrc),this.imgSrc=this.url,console.log(this.imgSrc),document.querySelector("firebase-document").image1.value=this.imgSrc.value},submit:function(){console.log("submit!"),this.$.mainToast.open()},closeToast:function(){this.$.mainToast.close()}});</script>
+</dom-module>
+</body></html>

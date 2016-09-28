@@ -1,0 +1,71 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="stylesheet" href="../swiper/dist/css/swiper.min.css">
+<script src="../swiper/dist/js/swiper.js"></script>
+
+</head><body><dom-module id="sc-swiper">
+  <template id="main">
+
+    <style>
+      #slides {
+        display: none;
+      }
+
+      .swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+        background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2027%2044%27%3E%3Cpath%20d%3D%27M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z%27%20fill%3D%27%23007aff%27%2F%3E%3C%2Fsvg%3E');
+      }
+      .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2027%2044%27%3E%3Cpath%20d%3D%27M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z%27%20fill%3D%27%23007aff%27%2F%3E%3C%2Fsvg%3E");
+      }
+
+      .swiper-container {
+        width: 100%;
+        height: 100%;
+      }
+
+      .swiper-wrapper {
+        height: calc(100% - 25px);
+      }
+
+      .swiper-container-horizontal > .swiper-pagination {
+        bottom: 0;
+      }
+
+      ::content .swiper-slide {
+        background-color: #eeeeee;
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      ::content .swiper-slide .caption {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        top: 8px;
+        font-size: 80%;
+        font-weight: bold;
+      }
+    </style>
+
+    <div id="slides" hidden="">
+      <content></content>
+    </div>
+
+    <div class="swiper-container" id="swiper">
+
+      <div class="swiper-pagination" id="pagination" hidden="[[!nav(pagination, nodes)]]"></div>
+
+      <div class="swiper-wrapper" id="wrapper"></div>
+
+      <div class="swiper-button-prev" id="prev" hidden="[[!nav(navigationButtons, nodes)]]"></div>
+      <div class="swiper-button-next" id="next" hidden="[[!nav(navigationButtons, nodes)]]"></div>
+
+      <div class="swiper-scrollbar" id="scrollbar" hidden="[[!scrollbar]]"></div>
+
+    </div>
+  </template>
+</dom-module>
+
+<script>!function(){window.Polymer({is:"sc-swiper",listeners:{"dom-change":"attached"},properties:{nodes:{type:Array,value:[]},pagination:{type:Boolean,value:!1},paginationClickable:{type:Boolean,value:!1},navigationButtons:{type:Boolean,value:!1},scrollbar:{type:Boolean,value:!1},initialSlide:{type:Boolean,value:0},a11y:{type:Boolean,value:!1},loop:{type:Boolean,value:!1},slidesPerView:{type:String,value:"1"},keyboardControl:{type:Boolean,value:!1},options:{type:Object,value:{}}},nav:function(e,t){return e&&t&&t.length&&t.length>1},getOptions:function(){return Object.keys(this.properties).reduce(function(e,t){return"undefined"!=typeof this.options[t]&&(e[t]=this.options[t]),this.$[t]?this[t]&&(e[t]=this.$[t]):"navigationButtons"===t?(e.prevButton=this.$.prev,e.nextButton=this.$.next):"options"!==t&&(e[t]=this[t]),(!this.nodes||this.nodes.length<=1)&&(e.loop=!1),e}.bind(this),{onSlideChangeStart:this.stopPlayers.bind(this)})},stopPlayers:function(){for(var e=this.querySelectorAll("video, audio"),t=0;t<e.length;t++)e[t].pause?e[t].pause():e[t].stop&&e[t].stop()},attached:function(){this._initializer&&clearTimeout(this._initializer),this._initializer=setTimeout(function(){var e=[],t=this.querySelectorAll("#slides > *:not(template):not(.swiper-slide)"),i=this.$.wrapper;i.innerHTML="",i.removeAttribute("style");for(var s=0;s<t.length;s++){t[s].classList.add("swiper-slide"),"ActiveXObject"in window&&/video|audio/i.test(t[s].tagName.toLowerCase())&&t[s].classList.add("swiper-no-swiping");var n=i.appendChild(t[s].cloneNode(!0));n.removeEventListener("tap",this.view),n.addEventListener("tap",this.view);var o=n.style.backgroundImage;if(o){o=o.replace(/^url\(['"]?([^'"\)]*).*?$/,"$1");var r=new window.Image;r.addEventListener("error",function(){this.fire("error",{},{bubbles:!1})}.bind(this)),r.src=o}e.push(n)}this.set("nodes",e),this.render()}.bind(this),10)},render:function(){return this.$.wrapper.clientHeight?(this._swiper&&(this.$.prev.classList.remove(this._swiper.params.buttonDisabledClass),this.$.next.classList.remove(this._swiper.params.buttonDisabledClass),this._swiper.destroy()),void(this._swiper=new window.Swiper(this.$.swiper,this.getOptions()))):setTimeout(this.render.bind(this),50)},view:function(e){e.cancelBubble=!0;var t=e.currentTarget&&e.currentTarget.getAttribute("data-url");if(t)return window.viewImage?window.viewImage(t):window.open(t)}})}();</script>
+</body></html>
