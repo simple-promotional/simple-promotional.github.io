@@ -1,0 +1,85 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-material/paper-material.html">
+
+
+</head><body><dom-module id="paper-typeahead-input">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+    paper-material{
+      left:0;
+      right:0;
+      position: absolute;
+      z-index: 10;
+    }
+    paper-item{
+      cursor: pointer;
+    }
+    .iron-selected{
+      background: #E0E0E0;
+    }
+    .typeahead{
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;color: #737373;
+    }
+    .typeahead::first-letter{
+      visibility: hidden;
+    }
+    .typeahead-with-label{
+      position:absolute;
+      top:12px;
+    }
+    .typeahead-without-label{
+      position:absolute;
+      top:-8px;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="{{label}}">
+     <h3>{{label}}</h3>
+    </template>
+    <template is="dom-if" if="{{prefetchUrl}}">
+    <iron-ajax auto="" url="{{prefetchUrl}}" handle-as="json" last-response="{{_prefetchedCandidates}}"></iron-ajax>
+    </template>
+
+   <div style="position:relative">
+    <p class$="typeahead {{_getTypeaheadClasses(noLabelFloat)}}">{{_getTypeaheadDisplay(_typeahead)}}</p>
+    <paper-input value="{{inputValue}}" on-keyup="_keyup" on-keydown="_keydown" label="{{placeholder}}" always-float-label="{{alwaysFloatLabel}}" autofocus="{{autofocus}}" char-counter="{{charCounter}}" disabled="{{disabled}}" error-message="{{errorMessage}}" maxlength="{{maxlength}}" minlength="{{minlength}}" no-label-float="{{noLabelFloat}}" readonly="{{readonly}}" required="{{required}}" auto-validate="{{autoValidate}}" pattern="{{pattern}}"></paper-input>
+
+    <template is="dom-if" if="{{suggestions.length}}">
+    <paper-material>
+    <paper-menu on-iron-select="_itemSelect">
+      <template is="dom-repeat" items="{{suggestions}}">
+        <template is="dom-if" if="{{isCandidatesJson}}">
+          <paper-item on-mouseover="_selection" on-tap="_select">
+           <span>{{_getDisplayValue(item)}}</span>
+          </paper-item>
+        </template>
+        <template is="dom-if" if="{{!isCandidatesJson}}">
+          <paper-item on-mouseover="_selection" on-tap="_select">
+           <span>{{item}}</span>
+          </paper-item>
+        </template>
+      </template>
+    </paper-menu>
+    </paper-material>
+
+   </template>
+  </div>
+  </template>
+
+</dom-module>
+
+<script>Polymer({is:"paper-typeahead-input",properties:{label:{type:String,value:""},placeholder:{type:String,value:"Please enter values here"},localCandidates:{type:Array,value:[]},prefetchUrl:String,_prefetchedCandidates:{type:Array,value:[]},suggestions:{type:Array,readOnly:!0,value:[]},_typeahead:{type:String,value:""},maxSuggestions:{type:Number,value:5},remoteUrl:String,remoteUrlWaitMs:{type:Number,value:void 0},isCandidatesJson:{type:Boolean,value:!1},searchableProps:{type:Array,value:[]},displayProp:{type:String,value:"undefined"},remoteUrlSearching:{type:Boolean,value:!1,notify:!0},inputValue:{type:String,notify:!0},inputObject:{type:Object,notify:!0},alwaysFloatLabel:Boolean,autofocus:Boolean,charCounter:Boolean,disabled:Boolean,errorMessage:String,maxlength:Number,minlength:Number,noLabelFloat:{type:Boolean,value:!1},readonly:Boolean,required:Boolean,autoValidate:Boolean,pattern:String},ready:function(){document.addEventListener("click",function(){for(var e=document.querySelectorAll("paper-typeahead-input"),t=0;t<e.length;t++){var i=e[t];i._setSuggestions([])}});var e=Polymer.dom(this.root).querySelector("paper-input");e.$.input.autocomplete="address-level4"},attached:function(){},detached:function(){},_getTypeaheadDisplay:function(e){var t=this._getInputValue();return""!=t&&"undefined"!=typeof e&&""!=e?t.substring(0,1)+e.substring(1):""},_getTypeaheadClasses:function(e){return e&&"undefined"!=typeof e&&1==e?"typeahead-without-label":"typeahead-with-label"},_itemSelect:function(e,t){this.fire("pt-item-select",t)},_keydown:function(e){if(40==e.which||38==e.which)e.preventDefault();else if(9==e.which&&this._typeahead&&"undefined"!=typeof this._typeahead&&""!=this._typeahead){e.preventDefault(),1==this.isCandidatesJson?(this.inputObject=this.suggestions[0],this.inputValue=this._getDisplayValue(this.inputObject)):this.inputValue=this._typeahead;var t=Polymer.dom(this.root).querySelector("paper-menu"),i=t[0];this._setSuggestions([]),this.fire("pt-item-confirmed",i),this._typeahead=""}},_selection:function(e){var t=Polymer.dom(this.root).querySelector("paper-menu");if(t&&"undefined"!=typeof t){var i=e.currentTarget;index=Number(t.indexOf(i)),t.select(index);var s=Polymer.dom(this.root).querySelector("paper-input");s.$.input.focus()}else console.log("suggestionsMenu not defined")},_getInputValue:function(){return this.inputValue&&"undefined"!=typeof this.inputValue?this.inputValue.trim():""},_updateTypeahead:function(){if(0==this.suggestions.length)return void(this._typeahead="");var e=this.suggestions[0];return 1==this.isCandidatesJson&&(e=this._getDisplayValue(e)),""==this._getInputValue()?void(this._typeahead=""):0!=e.toLowerCase().indexOf(this._getInputValue().toLowerCase())?void(this._typeahead=""):void(this._typeahead=e)},_select:function(e){var t=Polymer.dom(this.root).querySelector("paper-menu");if(t&&"undefined"!=typeof t){var i=e.currentTarget;index=Number(t.indexOf(i)),1==this.isCandidatesJson?(this.inputObject=this.suggestions[index],this.inputValue=this._getDisplayValue(this.inputObject)):this.inputValue=this.suggestions[index],this._setSuggestions([]),this.fire("pt-item-confirmed",e.target),this._typeahead="",e.stopPropagation()}else console.log("suggestionsMenu not defined")},_keyup:function(e){if(40==e.which){var t=Polymer.dom(this.root).querySelector("paper-menu"),i=t.focusedItem,s=0;"undefined"!=typeof i&&(s=Number(t.indexOf(i)),s=Math.min(s+1,this.suggestions.length-1)),t.select(s);var a=Polymer.dom(this.root).querySelector("paper-input");a.$.input.focus()}else if(38==e.which){var t=Polymer.dom(this.root).querySelector("paper-menu"),i=t.focusedItem;"undefined"!=typeof i&&(s=Number(t.indexOf(i)),s=Math.max(s-1,-1),t.select(s));var a=Polymer.dom(this.root).querySelector("paper-input");a.$.input.focus()}else if(13==e.which){var t=Polymer.dom(this.root).querySelector("paper-menu");if(t&&"undefined"!=typeof t){var i=t.focusedItem;"undefined"!=typeof i&&(s=Number(t.indexOf(i)),1==this.isCandidatesJson?(this.inputObject=this.suggestions[s],this.inputValue=this._getDisplayValue(this.inputObject)):this.inputValue=this.suggestions[s],this._setSuggestions([]),this.fire("pt-item-confirmed",i),this._typeahead="")}}else if(9==e.which);else{var t=Polymer.dom(this.root).querySelector("paper-menu");t&&"undefined"!=typeof t&&t.select(-1),this._search(this.inputValue.trim())}},_getDisplayValue:function(e){return this.displayProp&&"undefined"!=typeof this.displayProp?e[this.displayProp]:(console.log("paper-typeahead-input: displayProp not set up"),"")},_getTestCandidate:function(e){if(1==this.isCandidatesJson){for(var t=[],i=0;i<this.searchableProps.length;i++)"undefined"!=e[this.searchableProps[i]]&&t.push(e[this.searchableProps[i]]);return t}return[e]},_search:function(e){if(""==e)return this._setSuggestions([]),void this._updateTypeahead();var t=new RegExp(e.toLowerCase()),i=[];if("undefined"!=typeof this.localCandidates)for(var s=0;s<this.localCandidates.length&&i.length!=this.maxSuggestions;s++)for(var a=this._getTestCandidate(this.localCandidates[s]),n=0;n<a.length;n++){var r=a[n];if(1==t.test(r.toLowerCase())){i.push(this.localCandidates[s]);break}}if("undefined"!=typeof this._prefetchedCandidates)for(var s=0;s<this._prefetchedCandidates.length&&i.length!=this.maxSuggestions;s++)for(var a=this._getTestCandidate(this._prefetchedCandidates[s]),n=0;n<a.length;n++){var r=a[n];if(1==t.test(r.toLowerCase())){i.push(this._prefetchedCandidates[s]);break}}if("undefined"!=typeof this.remoteUrl){var o=this;o.fire("pt-remote-searching-start",o),o.remoteUrlSearching=!0,this.debounce("remoteUrlSearch",function(){var t=o.remoteUrl.replace("%QUERY",e),s=new XMLHttpRequest;s.open("GET",t,!0),s.setRequestHeader("Content-type","application/json");var a=o;s.onreadystatechange=function(){if(4===s.readyState){if(200==s.status){var e=s.response,t=JSON.parse(e),n=t.slice(0,a.maxSuggestions);i=i.concat(n),a.suggestions=i}o.remoteUrlSearching=!1,o.fire("pt-remote-searching-end",o)}},s.send()},this.remoteUrlWaitMs)}else this._setSuggestions(i);this._updateTypeahead()}});</script>
+</body></html>

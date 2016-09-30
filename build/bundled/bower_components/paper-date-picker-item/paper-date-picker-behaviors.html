@@ -1,0 +1,4 @@
+<!DOCTYPE html><html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../moment-element/moment-import.html">
+<script>var Polymer=Polymer||{};Polymer.PaperDatePickerItemBehavior={properties:{date:{type:Date,value:null,notify:!0},defaultTime:String,placeholder:{type:String,value:"Add a date"},cancelButton:{type:String,value:"Cancel"},okButton:{type:String,value:"OK"}},_edit:function(t){var e=document.createElement(t);return this.async(function(){e.date=this.date?moment(this.date).toDate():new Date,e.cancelButton=this.cancelButton,e.okButton=this.okButton,e.addEventListener("paper-date-picker-edit-dialog-save",function(t){this._changeDate(t.detail)}.bind(this)),e.open()}.bind(this)),e},_changeDate:function(t){this.date=t,this.fire("change",{value:this.date})},_getFormattedDate:function(t,e){return t?moment(t).format("ll"):e},_getFormattedTime:function(t){return t?moment(t).format("LT"):""}};</script>
+</head><body></body></html>

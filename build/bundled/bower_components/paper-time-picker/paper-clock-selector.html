@@ -1,0 +1,103 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-resizable/iron-resizable-behavior.html">
+<link rel="import" href="classlist-shim.html">
+
+
+
+</head><body><dom-module id="paper-clock-selector">
+  <template>
+    <style>
+      :host * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+      }
+
+      :host {
+        display: block;
+        @apply(--paper-font-body1);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        pointer-events: none;
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+      }
+      #clock {
+        display: block;
+        overflow: visible;
+      }
+      #clock * {
+        pointer-events: fill;
+      }
+      #face {
+        fill: var(--divider-color);
+        cursor: default;
+      }
+      .line {
+        stroke-width: 2;
+      }
+      .dot {
+        fill: var(--default-primary-color);
+      }
+      .line {
+        stroke: var(--default-primary-color);
+      }
+      .clock-hand {
+        z-index: 1;
+      }
+      .disc-large {
+        z-index: 2;
+        fill: var(--default-primary-color);
+      }
+      .disc-small {
+        fill: var(--text-primary-color);
+      }
+      .clock-hand.no-dot .disc-small {
+        fill: none;
+        stroke: none;
+      }
+      .number text {
+        z-index: 3;
+        fill: var(--primary-text-color);
+        @apply(--paper-font-subhead);
+        pointer-events: none;
+        dominant-baseline: middle;
+        text-align: center;
+        text-anchor: middle;
+      }
+      .number text.clipped {
+        z-index: 4;
+        fill: var(--text-primary-color);
+        clip-path: url('#handClip');
+      }
+      .select-area {
+        cursor: pointer;
+        fill-opacity: 0;
+      }
+      #clock.animating #clockHand, 
+      #clock.animating #clipCircle {
+        transition: transform 150ms ease-in;
+      }
+    </style>
+    <svg version="1.1" id="clock">
+      <defs>
+        <clipPath id="handClip">
+          <circle id="clipCircle" r$="{{_selectorSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
+        </clipPath>
+      </defs>
+      <circle id="face" class="bg" r$="{{_radius}}" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
+      <g id="clockHand" class="clock-hand">
+        <circle class="dot" r="2" cx$="{{_radius}}" cy$="{{_radius}}"></circle>
+        <line class="line" x1$="{{_radius}}" y1$="{{_radius}}" x2$="{{_handX}}" y2$="{{_handY}}"></line>
+        <circle class="disc-large" r$="{{_selectorSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
+        <circle class="disc-small" r$="{{_selectorDotSize}}" cx$="{{_handX}}" cy$="{{_handY}}"></circle>
+      </g>
+      <g id="numbers"></g>
+      <path class="select-area" on-tap="_onTouch" on-track="_onTouch" d$="{{_getSelectArea(_radius, _selectorInner, _selectorOuter)}}"></path>
+    </svg>
+  </template>
+  <script>!function(){function t(t,e){var i,n=0;return t=t||0,i=s(t),i<180&&e>i+180&&(n=-360),i>=180&&e<=i-180&&(n=360),t+n+(e-i)}var e="http://www.w3.org/2000/svg",i=12,s=function(t){return t=t?t%360:0,t<0?t+360:t};Polymer({is:"paper-clock-selector",properties:{selected:{type:Number,notify:!0,value:0,observer:"_selectedChanged"},count:{type:Number,value:0},step:{type:Number,value:1,observer:"_stepChanged"},useZero:{type:Boolean,value:!1},zeroPad:{type:Boolean,value:!1,observer:"_zeroPadChanged"},animated:{type:Boolean,value:!1}},listeners:{"iron-resize":"_updateSize"},observers:["_populate(count, step, useZero)"],behaviors:[Polymer.IronResizableBehavior],ready:function(){this._transitionEvent=this.style.WebkitTransition?"transitionEnd":"webkitTransitionEnd",this._populate(),this._selectedChanged(this.selected)},setClockHand:function(e,i,n){e=s(e),i="undefined"==typeof i?this.animated:i,i=!!this._radius&&i,this.$.clock.classList.remove("animating");var r,a=this._getTransform(this.$.clockHand);r=a?parseInt(a.match(/rotate\((-?\d+)deg\)/)[1]):0;var o=t(r,e);return s(o)===r?this._setHandRotation(r):i?(this._once(this._transitionEvent,function(){n&&n(),this.$.clock.classList.remove("animating"),this.fire("paper-clock-transition-end")}.bind(this),this.$.clockHand),this.$.clock.classList.add("animating"),void this.async(function(){this._setHandRotation(o)})):this._setHandRotation(o)},_getTransform:function(t){return t.style.transform|t.style.webkitTransform|t.style.msTransform},_setTransform:function(t,e){t.style.msTransform=t.style.webkitTransform=t.style.transform=e},_setTransformOrigin:function(t,e){t.style.msTransformOrigin=t.style.webkitTransformOrigin=t.style.transformOrigin=e},_setHandRotation:function(t){var e=t/360*this.count%this.step===0,i="rotate("+t+"deg)";this.$.clockHand.classList[["remove","add"][+e]]("no-dot"),this._setTransform(this.$.clockHand,i),this._setTransform(this.$.clipCircle,i)},_selectedChanged:function(t){if(this.count&&!isNaN(t)){var e=t%this.count,i=e;if(0!==i||this.useZero||(e=this.count),e!==this.selected)return void(this.selected=e);this._vibrate(),this.setClockHand(360/this.count*this.selected)}},_stepChanged:function(t,e){if(this._step=e,this.count&&!isNaN(t)){var s=Math.ceil(this.count/i);t<s&&(t=s),this._step=t}},_populate:function(){delete this._resizedCache;var t,e,i,s=this.$.numbers;for(this.set("_numbers",[]),this._stepChanged(this.step);s.firstChild;)s.removeChild(s.firstChild);for(var n=[],r=0;r<this.count;r++)e=r,t=null,0!==r||this.useZero||(e=this.count),i={index:r,value:e,display:e%this._step===0,x:0,y:0,label:this._formatNumber(e)},i.dom=this._createNumberElement(i),n.push(i),s.appendChild(i.dom.g);this.set("_numbers",n),this._positionClockPoints()},_updateNumber:function(t){var e=t.dom;e&&t.x&&t.y&&e.text&&(e.text.setAttributeNS(null,"x",t.x),e.text.setAttributeNS(null,"y",t.y),e.text.textContent=this._formatNumber(t.value),e.textClipped.setAttributeNS(null,"x",t.x),e.textClipped.setAttributeNS(null,"y",t.y),e.textClipped.textContent=this._formatNumber(t.value))},_createNumberElement:function(t){function i(t,i){var s=document.createElementNS(e,t);return i&&i.forEach(function(t){s.classList.add(t)}),Polymer.Settings.useNativeShadow||(s.classList.add("style-scope"),s.classList.add("paper-clock-selector")),s}var s=i("g",["number"]),n=null,r=null;return t.display&&(n=i("text"),n.textContent=t.label,s.appendChild(n),r=i("text",["clipped"]),r.textContent=t.label,s.appendChild(r)),{g:s,text:n,textClipped:r}},_updateSize:function(){var t=Math.min(this.offsetWidth,this.offsetHeight)/2;if(t&&this._resizedCache!==t){this._radius=t,this._selectorSize=20,this._selectorDotSize=3,this._padding=2,this._positionClockPoints(),this._resizedCache=this._radius,this.$.clock.style.width=2*t+"px",this.$.clock.style.height=2*t+"px";var e=t+"px "+t+"px";this._setTransformOrigin(this.$.clockHand,e),this._setTransformOrigin(this.$.clipCircle,e),this.async(function(){this._bounds=this.$.face.getBoundingClientRect()}.bind(this),150)}},_positionClockPoints:function(){if(this._radius){this._selectorOuter=this._radius-2*this._padding,this._selectorInner=this._selectorOuter-2*this._selectorSize;for(var t,e,i=this._selectorOuter-this._selectorSize,s=this._numbers,n=360/this.count*(Math.PI/180),r=0;r<this.count;r++)t=n*r,e=s[r],e.x=this._radius+Math.sin(t)*i,e.y=this._radius-Math.cos(t)*i,this._updateNumber(e);this._handX=this._numbers[0].x,this._handY=this._numbers[0].y}},_notifyNumberChanged:function(t){for(var e,i=["x","y"],s=0;s<i.length;s++)e=t+"."+i[s],this.get(e)&&this.notifyPath(e,this.get(e))},_getSelectArea:function(t,e,i){return"\nM "+(t-e)+" "+t+"\nA "+e+" "+e+" 0 0 0 "+(t+e)+" "+t+"\nA "+e+" "+e+" 0 0 0 "+(t-e)+" "+t+"\nM "+(t-i)+" "+t+"\nA "+i+" "+i+" 0 0 1 "+(t+i)+" "+t+"\nA "+i+" "+i+" 0 0 1 "+(t-i)+" "+t},_onTouch:function(t){var e=t.detail.x-this._bounds.left-this._radius,i=t.detail.y-this._bounds.top-this._radius,s=Math.abs(Math.sqrt(Math.pow(e,2)+Math.pow(i,2)));if(!(s<this._selectorInner||s>this._selectorOuter)){this.animated="track"!==t.type;var n=Math.atan(i/e);n=Math.PI/2+(e<0?n+Math.PI:n);var r=360/this.count*(Math.PI/180);this.selected=Math.round(n/r),"tap"!==t.type&&"end"!==t.detail.state||this.fire("paper-clock-selected",{value:this.selected,animated:this.animated})}},_formatNumber:function(t){return this.zeroPad?("0"+t).substr(-2):t.toString()},_getNumberClass:function(t,e,i){var s=t;return i.value===e.value&&(s+=" selected"),s},_vibrate:function(){this.debounce("vibrate",function(){navigator.vibrate&&navigator.vibrate(10)})},_zeroPadChanged:function(){this._numbers.forEach(function(t){this._updateNumber(t)}.bind(this))},_once:function(t,e,i){function s(){i.removeEventListener(t,s),e.apply(null,arguments)}i=i||this,i.addEventListener(t,s)}})}();</script>
+</dom-module>
+</body></html>

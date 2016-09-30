@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-time-picker/paper-time-picker.html">
+<link rel="import" href="../paper-time-picker/paper-time-picker-dialog-style.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../moment-element/moment-import.html">
+
+</head><body><dom-module id="paper-time-picker-edit-dialog">
+
+	<template>
+		<style include="paper-time-picker-dialog-style"></style>
+
+		<paper-dialog id="dialog" class="paper-time-picker-dialog" modal="" on-iron-overlay-closed="_onClosed">
+			<paper-time-picker id="timePicker" time="[[_extractTime(date)]]"></paper-time-picker>
+			<div class="buttons">
+				<paper-button dialog-dismiss="">[[cancelButton]]</paper-button>
+				<paper-button dialog-confirm="" on-tap="_save">[[okButton]]</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+
+</dom-module>
+
+<script>!function(){Polymer({is:"paper-time-picker-edit-dialog",properties:{date:{type:Date,notify:!0},cancelButton:{type:String,value:"Cancel"},okButton:{type:String,value:"OK"}},open:function(){Polymer.dom(document.body).appendChild(this),setTimeout(function(){this.$.dialog.open()}.bind(this),1)},_save:function(){this.date.setHours(this.$.timePicker.hour,this.$.timePicker.minute),this.fire("paper-date-picker-edit-dialog-save",this.date)},_onClosed:function(e,t){Polymer.dom(this.parentNode).removeChild(this)},_extractTime:function(e){return moment(e?e:new Date).format("LT")}})}();</script>
+</body></html>

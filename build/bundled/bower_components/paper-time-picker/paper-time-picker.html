@@ -1,0 +1,185 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../iron-resizable/iron-resizable-behavior.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="paper-clock-selector.html">
+<link rel="import" href="paper-time-picker-dialog-style.html">
+
+
+
+<style is="custom-style" include="paper-time-picker-dialog-style">
+  /* include dialog style at document-level for backward compatibility */
+</style>
+
+</head><body><dom-module id="paper-time-picker">
+  <template>
+    <style>
+      :host * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+      }
+
+      :host {
+        display: block;
+        background-color: var(--primary-background-color);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        @apply(--paper-font-body1);
+        font-size: 14px;
+      }
+
+      /** Landscape ******************/
+      #timePicker {
+        width: 512px;
+        height: 304px;
+        @apply(--layout-horizontal);
+        @apply(--paper-time-picker);
+      }
+      #heading {
+        width: 168px;
+        padding: 16px;
+        @apply(--layout-vertical);
+        @apply(--paper-time-picker-heading);
+      }
+      :host([enable-seconds]) #heading {
+        width: 200px;
+      }
+      #clockArea {
+        padding: 20px;
+      }
+
+      /** Narrow *********************/
+      :host([narrow]) #timePicker {
+        width: 328px;
+        height: 428px;
+        @apply(--layout-vertical);
+      }
+      :host([narrow]) #heading {
+        width: auto;
+        height: 96px;
+        padding: 0 48px;
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+      }
+      :host([enable-seconds][narrow]) #heading {
+        padding: 0 16px;
+      }
+      :host([narrow]) #heading .time {
+        margin-top: 6px;
+        @apply(--paper-font-display3);
+      }
+      :host([narrow]) #timePicker #heading .time {
+        font-size: 60px;
+        letter-spacing: .1ex !important;
+      }
+      :host([narrow]) #heading .period {
+        margin-left: 12px;
+        margin-top: 12px;
+      }
+      :host([narrow]) #clockArea {
+        /* padding: 30px 20px 10px 20px; */
+        padding: 16px;
+        @apply(--paper-time-picker-clock);
+      }
+
+      /** Heading ********************/
+      #heading {
+        box-sizing: border-box;
+        color: var(--light-primary-color); 
+        background: var(--default-primary-color);
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+      }
+      #heading > iron-selector {
+        margin-top: 10px;
+      }
+      #heading .time {
+        @apply(--paper-font-display2);
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        width: 5.34ex;
+        letter-spacing: .13ex !important;
+      }
+      :host([enable-seconds]) #heading .time{
+        width: 8.5ex;
+        font-size: 40px;
+      }
+      #heading .iron-selected {
+        color: var(--text-primary-color);
+      }
+      #heading .period {
+        font-weight: 600;
+        @apply(--paper-font-subhead);
+      }
+      #heading .time div,
+      #heading .period div {
+        cursor: pointer;
+      }
+
+      /** Clock *********************/
+      #clockArea {
+        background: var(--default-background-color);
+        overflow: hidden;
+        @apply(--layout-flex);
+        @apply(--paper-time-picker-clock);
+        @apply(--layout-vertical);
+      }
+      #clockArea > div {
+        @apply(--layout-flex);
+        position: relative;
+      }
+      .clock {
+        @apply(--layout-fit);
+      }
+      .clock-animatable{
+        @apply(--layout-fit);
+      }
+    </style>
+    <iron-media-query query="{{_getMediaQuery(forceNarrow, responsiveWidth)}}" query-matches="{{_queryMatches}}"></iron-media-query>
+    <div id="timePicker">
+      <div id="heading">
+        <iron-selector class="time" selectable="[name]" attr-for-selected="name" selected="{{view}}">
+          <div name="hours" class="hour">{{hour12}}</div>
+          <div class="sep">:</div>
+          <div name="minutes" class="minute">{{_zeroPad(minute, 2)}}</div>
+          <template is="dom-if" if="[[ enableSeconds ]]">
+            <div class="sep">:</div>
+            <div name="seconds" class="second">{{_zeroPad(second, 2)}}</div>
+          </template>
+        </iron-selector>
+        <iron-selector class="period" attr-for-selected="name" selected="{{period}}">
+          <div name="AM">AM</div>
+          <div name="PM">PM</div>
+        </iron-selector>
+      </div>
+      <div id="clockArea">
+        <div>
+          <neon-animated-pages id="pages" class="clock-animatable" attr-for-selected="name" selected="{{view}}" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+            <neon-animatable class="clock-animatable" name="hours">
+              <paper-clock-selector class="clock" id="hourClock" count="12" step="1" animated="[[animated]]" selected="{{hour12}}"></paper-clock-selector> 
+            </neon-animatable>
+            <neon-animatable class="clock-animatable" name="minutes">
+              <paper-clock-selector class="clock" id="minuteClock" count="60" step="5" animated="[[animated]]" use-zero="" zero-pad="" selected="{{minute}}"></paper-clock-selector> 
+            </neon-animatable>
+            <template is="dom-if" if="[[ enableSeconds ]]">
+              <neon-animatable class="clock-animatable" name="seconds">
+                <paper-clock-selector class="clock" id="secondClock" count="60" step="5" animated="[[animated]]" use-zero="" zero-pad="" selected="{{second}}"></paper-clock-selector> 
+              </neon-animatable>
+            </template>
+          </neon-animated-pages>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>!function(){function e(){window.console&&console.warn.apply(console,arguments)}Polymer({is:"paper-time-picker",properties:{time:{type:String,value:"00:00",notify:!0,observer:"_timeChanged"},rawValue:{type:Number,value:0,notify:!0,observer:"_rawValueChanged"},hour:{type:Number,observer:"_hourChanged",notify:!0,value:0},hour12:{type:Number,notify:!0,observer:"_hour12Changed"},minute:{type:Number,notify:!0,observer:"_minuteChanged",value:0},second:{type:Number,notify:!0,observer:"_secondChanged",value:0},period:{type:String,notify:!0,observer:"_periodChanged",value:"AM"},view:{type:String,notify:!0,value:"hours",observer:"_viewChanged"},responsiveWidth:{type:String,value:"560px"},forceNarrow:{type:Boolean,value:!1},animated:{type:Boolean,value:!1},narrow:{type:Boolean,reflectToAttribute:!0,value:!1,notify:!0},isTouch:{type:Boolean,value:!1,reflectToAttribute:!0},enableSeconds:{type:Boolean,value:!1},_queryMatches:{type:Boolean,value:!1,observer:"_computeNarrow"}},behaviors:[Polymer.IronResizableBehavior],observers:["_updateTime(hour, minute, second)"],listeners:{"iron-resize":"_resizeHandler","paper-clock-selected":"_onClockSelected"},ready:function(){this.isTouch="ontouchstart"in window,this.view="hours"},_timeChanged:function(e){if(!e)return void(this.rawValue=0);var t=this.parseTime(e),i=this.formatTime(t.hour,t.minute,t.second);if(i!==e)return void(this.time=i);var n=60*t.hour+t.minute;this.enableSeconds&&(n=60*n+t.second),this.rawValue=n},_updateTime:function(e,t,i){var n=60*e+t;this.enableSeconds&&(n=60*n+i),this.rawValue=n},formatTime:function(e,t,i){var n=e%24<12?"AM":"PM";return e=e%12||12,t=("0"+t).substr(-2),i=("0"+i).substr(-2),this.enableSeconds&&(t+=":"+i),e+":"+t+" "+n},parseTime:function(t){var i=/^\s*(\d{1,2}):?(\d{2})(:?(\d{2}))?(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/,n=t.match(i);if(!n)return void e("Invalid time:",t);var s=parseInt(n[1]),o=parseInt(n[2]),r=n[4]?parseInt(n[4]):0,a=n[6]?n[6][0].toUpperCase()+"M":"AM";return"PM"===a&&s<12?s=(s+12)%24:"AM"===a&&12===s&&(s=0),{hour:s,minute:o,second:r}},togglePeriod:function(){this.period="AM"===this.period?"PM":"AM"},_rawValueChanged:function(e,t){return isNaN(parseInt(e))?void(this.rawValue=t):(this.enableSeconds?(this.hour=Math.floor(e/3600),this.minute=Math.floor(e/60)%60,this.second=e%60):(this.hour=Math.floor(e/60),this.minute=e%60,this.second=0),void(this.time=this.formatTime(this.hour,this.minute,this.second)))},_hour12Changed:function(e){var t="PM"===this.period?12:0;this.hour=(e%12+t)%24},_hourChanged:function(t,i){if(t=parseInt(t),!isNaN(t)||t){if(isNaN(t))return e("Invalid number:",t),void(this.hour=i);t=parseFloat(t)%24,this.hour=t,this.hour12=this._twelveHour(t),this.period=["PM","AM"][+(t<12)]}},_minuteChanged:function(e){e=parseFloat(e)%60,this.minute=e},_secondChanged:function(e){e=parseFloat(e)%60,this.second=e},_periodChanged:function(e){isNaN(parseInt(this.hour))||isNaN(parseInt(this.minute))||("AM"===e&&this.hour>=12?this.hour-=12:"PM"===e&&this.hour<12&&(this.hour+=12))},_zeroPad:function(e,t){if(void 0!==e&&!isNaN(e)&&!isNaN(t))return("0"+e).substr(-t)},_twelveHour:function(e){return e%12||12},_isEqual:function(e,t){return e===t},_getMediaQuery:function(e,t){return"(max-width: "+(e?"":t)+")"},_computeNarrow:function(){this.set("narrow",this._queryMatches||this.forceNarrow)},_viewChanged:function(e,t){if(this.$.pages._notifyPageResize(),!this._selecting&&t&&e&&this.animated){var i={hours:this.$.hourClock,minutes:this.$.minuteClock,seconds:this.$.secondClock},n=i[t],s=i[e],o=360/n.count*n.selected,r=360/s.count*s.selected;s.setClockHand(o,!1),n.setClockHand(r),this.async(function(){s.setClockHand(r,!0,function(){this.async(function(){n.setClockHand(o,!1)},200)}.bind(this))}.bind(this))}},_onClockSelected:function(e){if("hours"===this.view){var t=function(){this.async(function(){this._selecting=!0,this.view="minutes",this._selecting=!1}.bind(this),100),this.$.hourClock.removeEventListener("paper-clock-transition-end",t)}.bind(this);e.detail.animated?this.$.hourClock.addEventListener("paper-clock-transition-end",t):t(),this.hour12!==e.detail.value?this.hour12=e.detail.value:t()}else if("minutes"===this.view&&this.enableSeconds){var i=function(){this.async(function(){this._selecting=!0,this.view="seconds",this._selecting=!1}.bind(this),100),this.$.minuteClock.removeEventListener("paper-clock-transition-end",i)}.bind(this);e.detail.animated?this.$.minuteClock.addEventListener("paper-clock-transition-end",i):i(),this.minute!==e.detail.value?this.minute=e.detail.value:i()}},_resizeHandler:function(){this.offsetWidth&&!this._resizing&&(this.updateStyles(),this.async(function(){this._resizing=!0,this.$.pages._notifyPageResize(),this._resizing=!1}.bind(this)))}})}();</script>
+</dom-module>
+</body></html>

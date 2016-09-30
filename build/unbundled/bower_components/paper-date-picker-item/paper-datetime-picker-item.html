@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../paper-item/paper-icon-item.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-item/paper-item-body.html">
+<link rel="import" href="../paper-ripple/paper-ripple.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="paper-date-picker-edit-dialog.html">
+<link rel="import" href="paper-time-picker-edit-dialog.html">
+<link rel="import" href="paper-date-picker-behaviors.html">
+
+
+</head><body><dom-module id="paper-datetime-picker-item">
+
+	<style>
+		:host {
+			@apply(--layout-horizontal);
+		}
+
+		.icon {
+			color: var(--disabled-text-color);
+		}
+
+		.item[has-no-date] .text {
+			color: var(--secondary-text-color);
+		}
+	</style>
+
+	<template>
+		<paper-icon-item on-tap="_editDate" class="flex item" has-no-date$="[[_hasNoDate]]">
+			<paper-ripple fit=""></paper-ripple>
+			<iron-icon icon="[[icon]]" item-icon="" class="icon"></iron-icon>
+			<paper-item-body class="text">[[_formattedDate]]</paper-item-body>
+		</paper-icon-item>
+		<paper-item class="flex" on-tap="_editTime" hidden="[[_hasNoDate]]">
+			<paper-ripple fit=""></paper-ripple>
+			[[_formattedTime]]
+		</paper-item>
+	</template>
+
+</dom-module>
+
+<script>!function(){Polymer({is:"paper-datetime-picker-item",properties:{icon:String,_formattedDate:String,_formattedTime:{type:String,value:"",computed:"_getFormattedTime(date)"},_hasNoDate:{type:Boolean,value:!0,computed:"_computeHasNoDate(date)"}},behaviors:[Polymer.PaperDatePickerItemBehavior],observers:["_onChangedPlaceholder(placeholder)","_onChangedDate(date)"],_editDate:function(){var e=document.createElement("paper-date-picker-edit-dialog");return this.async(function(){e.date=this.date?moment(this.date).toDate():new Date,e.cancelButton=this.cancelButton,e.okButton=this.okButton,e.addEventListener("paper-date-picker-edit-dialog-save",function(e){var t=e.detail;if("undefined"!=typeof this.date&&null!==this.date){var a=moment(this.date).format("HH"),i=moment(this.date).format("mm");t.setHours(a,i)}else if(this.defaultTime){var o=new moment(this.defaultTime,"HH:mm"),a=moment(o).format("HH"),i=moment(o).format("mm");t.setHours(a,i)}this.date=t,this.fire("change",{value:this.date})}.bind(this)),e.open()}.bind(this)),e},_onChangedPlaceholder:function(e){this._formattedDate=this._getFormattedDate(this.date,e)},_onChangedDate:function(e){this._formattedDate=this._getFormattedDate(e,this.placeholder)},_editTime:function(){return this._edit("paper-time-picker-edit-dialog")},_computeHasNoDate:function(e){return"undefined"==typeof e||null===e}})}();</script>
+</body></html>

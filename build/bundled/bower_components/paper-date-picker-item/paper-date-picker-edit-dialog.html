@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../paper-date-picker/paper-date-picker-dialog-style.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+
+</head><body><dom-module id="paper-date-picker-edit-dialog">
+
+	<template>
+		<style include="paper-date-picker-dialog-style"></style>
+
+		<paper-dialog id="dialog" class="paper-date-picker-dialog" modal="" on-iron-overlay-closed="_onClosed">
+			<paper-date-picker id="datePicker" date="{{date}}" force-narrow=""></paper-date-picker>
+			<div class="buttons">
+				<paper-button dialog-dismiss="">[[cancelButton]]</paper-button>
+				<paper-button dialog-confirm="" on-tap="_save">[[okButton]]</paper-button>
+			</div>
+		</paper-dialog>
+	</template>
+
+</dom-module>
+
+<script>!function(){Polymer({is:"paper-date-picker-edit-dialog",properties:{date:{type:Date,notify:!0},cancelButton:{type:String,value:"Cancel"},okButton:{type:String,value:"OK"}},open:function(){Polymer.dom(document.body).appendChild(this),setTimeout(function(){this.$.dialog.open()}.bind(this),1)},_save:function(){this.fire("paper-date-picker-edit-dialog-save",this.date)},_onClosed:function(e,t){Polymer.dom(this.parentNode).removeChild(this)}})}();</script>
+</body></html>
