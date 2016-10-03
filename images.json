@@ -2,7 +2,7 @@
 	{
 	"image1": {
 
-		"value": "http://placekitten.com/640/320",
+		"value": "http://multimedia.bbycastatic.ca/multimedia/products/500x500/104/10459/10459827.jpg",
 		"imageUrlFr": "http://placekitten.com/640/320",
 
 		"linkUrlEn": "http://www.holacracy.org/",
@@ -14,7 +14,7 @@
 	},
 	"image2": {
 
-		"value": "http://lorempixel.com/640/320",
+		"value": "http://multimedia.bbycastatic.ca/multimedia/products/500x500/104/10400/10400455.jpg",
 		"imageUrlFr": "http://lorempixel.com/640/320",
 
 		"linkUrlEn": "http://www.holacracy.org/",
@@ -26,8 +26,8 @@
 	},
 	"image3": {
 
-		"value": "http://placehold.it/640x320",
-		"imageUrlFr": "http://placehold.it/640x320",
+		"value": "http://placehold.it/370x156",
+		"imageUrlFr": "http://placehold.it/370x156",
 
 		"linkUrlEn": "http://www.holacracy.org/",
 		"linkUrlFr": "http://www.holacracy.org/",
@@ -35,6 +35,54 @@
 		"altTextEn": "That's right!",
 		"altTextFr": "C'est vrait!"
 
-	}
-}
+	},
+    "image4": {
+
+        "value": "http://placehold.it/370x156",
+        "imageUrlFr": "http://placekitten.com/640/320",
+
+        "linkUrlEn": "http://www.holacracy.org/",
+        "linkUrlFr": "http://www.holacracy.org/",
+
+        "altTextEn": "That's right!",
+        "altTextFr": "C'est vrait!"
+
+      },
+     "image5": {
+
+        "value": "http://placehold.it/370x156",
+        "imageUrlFr": "http://lorempixel.com/640/320",
+
+        "linkUrlEn": "http://www.holacracy.org/",
+        "linkUrlFr": "http://www.holacracy.org/",
+
+        "altTextEn": "That's right!",
+        "altTextFr": "C'est vrait!"
+
+      },
+     "image6": {
+
+        "value": "http://placehold.it/370x156",
+        "imageUrlFr": "http://placehold.it/640x320",
+
+        "linkUrlEn": "http://www.holacracy.org/",
+        "linkUrlFr": "http://www.holacracy.org/",
+
+        "altTextEn": "That's right!",
+        "altTextFr": "C'est vrait!"
+
+      },
+      "image7": {
+
+        "value": "http://placehold.it/370x156",
+        "imageUrlFr": "http://placehold.it/640x320",
+
+        "linkUrlEn": "http://www.holacracy.org/",
+        "linkUrlFr": "http://www.holacracy.org/",
+
+        "altTextEn": "That's right!",
+        "altTextFr": "C'est vrait!"
+
+      }
+    }
 }
