@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input-container.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
@@ -65,7 +66,7 @@
       }
 
       iron-swipeable-pages {
-        height: 560px;
+        height: 370px;
         /*width: 110%;*/
         /*min-width: 380px;*/
         /*max-width: 500px;*/
@@ -90,6 +91,16 @@
         position: absolute;
         top: 240px;
         left: 526px;
+      }
+      #target1Text {
+        position: absolute;
+        top: 240px;
+        left: 526px;
+        @apply(--paper-font-headline);
+        width: 900px;
+        z-index: 2;
+        --paper-input-container-color: transparent;
+        --paper-input-container-focus-color: transparent;
       }
       #target2 {
         position: absolute;
@@ -132,6 +143,21 @@
 
     <paper-material class="preview">
       <iron-image src="../../images/desktop.png"></iron-image>
+      <!--<paper-input id="target1Text" value="{{images.image1.linkUrlEn}}"></paper-input>-->
+      <!--<paper-input-container id="target1Text" value="">-->
+      <!--</paper-input-container>-->
+      <!--<paper-input-container id="target1Text">-->
+        <!--<div prefix>$</div>-->
+        <!--<label>Total</label>-->
+        <!--<input is="iron-input" value="{{images.image1.linkUrlEn}}">-->
+        <!--<paper-icon-button suffix icon="clear"></paper-icon-button>-->
+      <!--</paper-input-container>-->
+      <paper-input-container id="target1Text">
+        <!--<label>{{images.image1.linkUrlEn}}</label>-->
+        <input is="iron-input" value="{{images.image1.linkUrlEn}}">
+        <!--<paper-textarea label="Textarea label" value="{{images.image1.linkUrlEn}}"></paper-textarea>-->
+      </paper-input-container>
+
       <iron-image style="width: 734px; height: 343px;" sizing="contain" id="target1" src="{{images.image1.value}}"></iron-image>
       <iron-image style="width: 360px; height: 156px;" sizing="cover" id="target2" src="{{images.image2.value}}"></iron-image>
       <iron-image style="width: 360px; height: 152px;" sizing="cover" id="target3" src="{{images.image3.value}}"></iron-image>
@@ -174,10 +200,10 @@
           <div>
               <div hidden$="[[isFrench]]">
                 <!--<paper-input label="Image Target ID" value="{{images.image1.text}}"></paper-input>-->
-                <paper-input label="Headline Emphasized Text" value=""></paper-input>
-                <paper-input label="Regular Text" value=""></paper-input>
+                <!--<paper-input label="Headline Emphasized Text" value="{{images.image1.linkUrlEn}}"></paper-input>-->
+                <!--<paper-input label="Regular Text" value=""></paper-input>-->
                 <paper-input label="Image link URL" value="{{images.image1.value}}"></paper-input>
-                <paper-input label="Image launch URL" value="{{images.image1.linkUrlEn}}"></paper-input>
+                <paper-input label="Image Headline Emphasized Text" value="{{images.image1.linkUrlEn}}"></paper-input>
                 <paper-input label="Image Alt Text" value="{{images.image1.altTextEn}}"></paper-input>
                 </div>
 
