@@ -89,28 +89,67 @@
       }
       #target1 {
         position: absolute;
-        top: 240px;
-        left: 526px;
+        top: 248px;
+        left: 597px;
       }
       #target1Text {
         position: absolute;
-        top: 240px;
-        left: 526px;
-        @apply(--paper-font-headline);
+        top: 360px;
+        left: 616px;
+        @apply(--paper-font-subhead);
         width: 900px;
         z-index: 2;
-        --paper-input-container-color: transparent;
-        --paper-input-container-focus-color: transparent;
+        background: transparent;
+        color: white;
+        font-size: 64px;
+        font-weight: 300;
+      }
+      #target1Text {
+        position: absolute;
+        top: 361px;
+        left: 611px;
+        @apply(--paper-font-subhead);
+        width: 900px;
+        z-index: 2;
+        background: transparent;
+        color: white;
+        font-size: 48px;
+        font-weight: 500;
+      }
+      #target1TextSub {
+        position: absolute;
+        top: 405px;
+        left: 613px;
+        @apply(--paper-font-subhead);
+        width: 900px;
+        z-index: 2;
+        background: transparent;
+        color: white;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      #target2Text {
+        position: absolute;
+        top: 618px;
+        left: 611px;
+        @apply(--paper-font-subhead);
+        width: 900px;
+        z-index: 2;
+        background: transparent;
+        color: #da1a36;
+        font-size: 21px;
+        font-weight: 800;
+        font-family: 'open sans',Arial,Sans-Serif;
       }
       #target2 {
         position: absolute;
-        top: 600px;
-        left: 526px;
+        top: 616px;
+        left: 841px;
       }
       #target3 {
         position: absolute;
-        top: 604px;
-        left: 900px;
+        top: 617px;
+        left: 1214px;
       }
       #target4 {
         position: absolute;
@@ -132,6 +171,33 @@
         top: 954px;
         left: 900px;
       }
+      #btn-primary {
+        position: absolute;
+        top: 449px;
+        left: 608px;
+        width: 134px;
+        background: #fff200;
+        box-shadow: inset 0 -2px 0 0 #ffd800;
+        -webkit-box-shadow: inset 0 -2px 0 0 #ffd800;
+        -moz-box-shadow: inset 0 -2px 0 0 #ffd800;
+        font-weight: 700;
+        font-size: 14px;
+        z-index: 9;
+      }
+      #btn-secondary {
+        position: absolute;
+        top: 449px;
+        left: 748px;
+        width: 134px;
+        background: #007fd8;
+        box-shadow: inset 0 -2px 0 0 #003b64;
+        -webkit-box-shadow: inset 0 -2px 0 0 #003b64;
+        -moz-box-shadow: inset 0 -2px 0 0 #003b64;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        z-index: 9;
+      }
     </style>
 
 
@@ -139,8 +205,8 @@
 
     <paper-datetime-picker-item icon="icons:today" placeholder="Set Preview Time (PST)" default-time="09:00"></paper-datetime-picker-item>
 
-    <paper-material class="preview">
-      <iron-image src="../../images/desktop.png"></iron-image>
+    <paper-material class="preview" elevation="0">
+      <iron-image src="../../images/bg3.png"></iron-image>
       
       
       
@@ -150,15 +216,37 @@
         
         
       
-      <paper-input-container id="target1Text">
+      
         
-        <input is="iron-input" value="{{images.image1.linkUrlEn}}">
         
-      </paper-input-container>
+        
+      
 
-      <iron-image style="width: 734px; height: 343px" sizing="contain" id="target1" src="{{images.image1.value}}"></iron-image>
-      <iron-image style="width: 360px; height: 156px" sizing="cover" id="target2" src="{{images.image2.value}}"></iron-image>
-      <iron-image style="width: 360px; height: 152px" sizing="cover" id="target3" src="{{images.image3.value}}"></iron-image>
+      <paper-card elevation="0" id="target1Text">
+        {{images.image1.linkUrlEn}}
+      </paper-card>
+
+      <paper-card elevation="0" id="target1TextSub">
+        {{images.image1.text}}
+        
+      </paper-card>
+
+
+      <paper-card elevation="0" id="target2Text">
+        {{images.image2.linkUrlEn}}
+      </paper-card>
+
+      <paper-button id="btn-primary">
+        {{images.image1.altTextEn}}
+      </paper-button>
+
+      <paper-button id="btn-secondary">
+        Learn More
+      </paper-button>
+
+      <iron-image style="width: 940px; height: 338px" sizing="cover" id="target1" src="{{images.image1.value}}"></iron-image>
+      <iron-image style="width: 100px; height: 100px" sizing="cover" id="target2" src="{{images.image2.value}}"></iron-image>
+      <iron-image style="width: 100px; height: 100px" sizing="cover" id="target3" src="{{images.image3.value}}"></iron-image>
       <iron-image style="width: 360px; height: 165px" sizing="cover" id="target4" src="{{images.image4.value}}"></iron-image>
       <iron-image style="width: 360px; height: 165px" sizing="cover" id="target5" src="{{images.image5.value}}"></iron-image>
       <iron-image style="width: 360px; height: 148px" sizing="cover" id="target6" src="{{images.image6.value}}"></iron-image>
@@ -196,7 +284,7 @@
       <iron-swipeable-pages id="ironPropsCarousel" selected="{{slideIndex}}" transition-duration="0" disabled="">
           <div>
               <div hidden$="[[isFrench]]">
-                
+                <paper-input label="Image Target ID" value="{{images.image1.text}}"></paper-input>
                 
                 
                 <paper-input label="Image link URL" value="{{images.image1.value}}"></paper-input>
