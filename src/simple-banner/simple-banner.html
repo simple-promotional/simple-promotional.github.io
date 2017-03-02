@@ -46,13 +46,20 @@
       .yellow-button {
         color: var(--paper-yellow-a100);
       }
+
+      #controller {
+        margin-top: 24px;
+      }
       @media (max-width: 767px) {
         .preview {
           display:none;
         }
+        #previewDate {
+          display:none;
+        }
       }
       @media (min-width: 768px) {
-        .controller {
+        #controller {
           display: none;
         }
       }
@@ -205,7 +212,7 @@
       location="https://banners-18980.firebaseio.com/images"
       data="{{images}}"></firebase-document>
 
-    <paper-datetime-picker-item icon="icons:today" placeholder="Set Preview Time (PST)" default-time="09:00"></paper-datetime-picker-item>
+    <paper-datetime-picker-item icon="icons:today" placeholder="Set Preview Time (PST)" default-time="09:00" id="previewDate"></paper-datetime-picker-item>
 
     <paper-material class="preview" elevation="0">
       <iron-image src="../../images/bg4.png"></iron-image>
@@ -256,7 +263,7 @@
       <!--<iron-image style="width: 734px; height: 363px;" sizing="contain" class="target" src="../../images/banner.png"></iron-image>-->
     </paper-material>
 
-    <paper-material elevation="1" class="controller">
+    <paper-material elevation="1" id="controller">
       <h1 class="headline">Banner Publish Tool</h1>
       <paper-typeahead-input max-suggestions="10" placeholder="Category"
                              prefetch-url="../../categories.json">
@@ -287,7 +294,6 @@
       <iron-swipeable-pages id="ironPropsCarousel" selected="{{slideIndex}}" transition-duration="0" disabled>
           <div>
               <div hidden$="[[isFrench]]">
-
                 <!--<paper-input label="Headline Emphasized Text" value="{{images.image1.linkUrlEn}}"></paper-input>-->
                 <!--<paper-input label="Regular Text" value=""></paper-input>-->
                 <paper-input label="Image link URL" value="{{images.image1.value}}"></paper-input>
